@@ -1,0 +1,12 @@
+{
+    "parser": "babel-eslint",
+    "extends": [
+        "nc_ursa"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "rules": {
+    }
+}
