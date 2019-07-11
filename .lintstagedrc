@@ -3,7 +3,7 @@
         "eslint --fix",
         "git add"
     ],
-    "src/utils/**/*.js": [
+    "src/utils/*.js": [
         "eslint --fix",
         "git add"
     ]
