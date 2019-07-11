@@ -1,5 +1,5 @@
 {
     "hooks": {
-        "pre-push": "lint-staged"
+        "pre-commit": "echo 'husky pre-commit' & lint-staged"
     }
 }
