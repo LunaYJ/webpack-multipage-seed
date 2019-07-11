@@ -8,17 +8,10 @@ function resolve(dir) {
   return path.join(__dirname, '..', dir);
 }
 
-// const createLintingRule = () => ({
-//   test: /\.(js|vue)$/,
-//   loader: 'eslint-loader',
-//   enforce: 'pre',
-//   include: [resolve('src'), resolve('test')],
-//   options: {
-//     formatter: require('eslint-friendly-formatter'),
-//     emitWarning: !config.dev.showEslintErrorsInOverlay,
-//   },
-// });
-
+/**
+ * @todo webpack
+ * @type {{output: {path: *, filename: string, publicPath: *}, entry: {index: string, login: string}, node: {setImmediate: boolean, dgram: string, tls: string, child_process: string, net: string, fs: string}, resolve: {extensions: string[], alias: {"@": *, vue$: string}}, module: {rules: *[]}, context: string}}
+ */
 const baseConf = {
   context: path.resolve(__dirname, '../'),
   entry: {
@@ -28,8 +21,8 @@ const baseConf = {
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath : config.dev.assetsPublicPath,
+    publicPath: process.env.NODE_ENV === 'production' ?
+      config.build.assetsPublicPath : config.dev.assetsPublicPath,
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -39,29 +32,19 @@ const baseConf = {
     },
   },
   module: {
-    rules: [
-      // ...(config.dev.useEslint ? [createLintingRule()] : []),
-      {
-        test: /\.vue$/,
-        // loader: 'vue-loader',
-        use: [{
-          loader: 'iview-loader',
-          options: {
-            prefix: true,
-          },
-        },
-        {
-          loader: 'vue-loader',
-          options: vueLoaderConfig,
-        },
-
-        ],
-        // options: vueLoaderConfig
-      },
-      {
+    rules: [{
         test: /\.js$/,
-        loader: 'babel-loader',
-        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')],
+        include: [resolve('src')],
+        use: [{
+            loader: "babel-loader",
+          },
+          {
+            loader: "eslint-loader",
+            options: {
+              formatter: require("eslint-friendly-formatter")
+            }
+          }
+        ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
