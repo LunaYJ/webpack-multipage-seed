@@ -1,3 +1,4 @@
 var a;
 
-let b; let c, d
+let b; let c; let
+  d;
