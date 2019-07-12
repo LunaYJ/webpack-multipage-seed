@@ -1,8 +1,7 @@
 const config = require('../config');
 const packageConfig = require('../package.json');
-const os = require('os');
 
-exports.assetsPath = (_path) => {
+exports.assetsPath = function(_path) {
     const assetsSubDirectory = process.env.NODE_ENV === 'production' ?
         config.build.assetsSubDirectory :
         config.dev.assetsSubDirectory
@@ -25,18 +24,5 @@ exports.createNotifierCallback = () => {
             subtitle: filename || '',
             icon: path.join(__dirname, 'logo.png')
         })
-    }
-}
-
-exports.getIPAddr = () => {
-    const interfaces = os.networkInterfaces();
-    for (let devName in interfaces) {
-        let iface = interfaces[devName];
-        for (let i = 0; i < iface; i++) {
-            let alias = iface[i];
-            if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
-                return alias.address
-            }
-        }
     }
 }

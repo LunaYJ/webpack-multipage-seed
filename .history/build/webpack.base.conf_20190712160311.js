@@ -3,13 +3,6 @@ const path = require('path');
 const utils = require('./utils');
 const config = require('../config');
 const vueLoaderConfig = require('./vue-loader.conf');
-const miniCssExtractPlugin = require('mini-css-extract-plugin');
-const htmlWebpackPlugin = require('html-webpack-plugin');
-const transferWebpackPlugin = require('transfer-webpack-plugin');
-const autoprefixer = require('autoprefixer');
-const os = require('os');
-const portfinder = require('portfinder');
-const fs = require('fs');
 
 /** */
 function resolve(dir) {
@@ -41,10 +34,6 @@ const baseConf = {
                 include: [resolve('src')],
                 use: [{
                         loader: "babel-loader",
-                        options: {
-                            presets: ['@babel/preset-env'],
-                            plugins: ['@babel/plugin-transform-runtime']
-                        }
                     },
                     {
                         loader: "eslint-loader",
@@ -53,32 +42,6 @@ const baseConf = {
                         }
                     }
                 ]
-            },
-            {
-                test: /\.css$/,
-                use: [miniCssExtractPlugin.loader, 'css-loader', {
-                    loader: 'postcss-loader',
-                    options: {
-                        plugins: [
-                            autoprefixer({
-                                browsers: ['ic >= 8', 'Firefox >= 20', 'Safari >= 5', 'Android >= 4', 'Ios >=6', 'last 4 version']
-                            })
-                        ]
-                    }
-                }]
-            },
-            {
-                test: /\.less$/,
-                user: [miniCssExtractPlugin.loader, 'css-loader', {
-                    loader: 'postcss-loader',
-                    options: {
-                        plugins: [
-                            autoprefixer({
-                                browsers: ['ic >= 8', 'Firefox >= 20', 'Safari >= 5', 'Android >= 4', 'Ios >=6', 'last 4 version']
-                            })
-                        ]
-                    }
-                }, 'less-loader']
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -106,20 +69,18 @@ const baseConf = {
             },
         ],
     },
-    plugins: [
-        new miniCssExtractPlugin({
-            filename: './css/[name].css'
-        }),
-        new htmlWebpackPlugin.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            "window.jquery": 'jquery'
-        }),
-        new transferWebpackPlugin([{
-            from: 'assets',
-            to: 'assets'
-        }], path.resolve(__dirname, '..', 'src')),
-        new htmlWebpackPlugin.HotModuleReplacementPlugin(),
-    ]
+    node: {
+        // prevent webpack from injecting useless setImmediate polyfill because Vue
+        // source contains it (although only uses it if it's native).
+        setImmediate: false,
+        // prevent webpack from injecting mocks to Node native modules
+        // that does not make sense for the client
+        dgram: 'empty',
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty',
+        child_process: 'empty',
+    },
 };
 module.exports = baseConf;
+fda

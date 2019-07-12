@@ -10,10 +10,7 @@ module.exports = {
         errorOverlay: true,
         notifyOnErrors: true,
         poll: false,
-        proxy: {},
-        devtool: 'cheap-module-eval-source-map',
-        cacheBusting: true,
-        cssSourceMap: true,
+        proxy: {}
     },
     build: {
         assetsRoot: path.resolve(__dirname, '..', 'dist'),

@@ -2,10 +2,8 @@ const merge = require('webpack-merge');
 const baseConf = require('./webpack.base.conf');
 const path = require('path');
 const config = require('../config');
-const utils = require('./utils');
-const HOST = process.env.HOST || utils.getIPAddr();
+const HOST = process.env.HOST;
 const PORT = process.env.PORT && Number(process.env.PORT);
-
 
 const devConf = merge(baseConf, {
     devtool: config.dev.devtool,

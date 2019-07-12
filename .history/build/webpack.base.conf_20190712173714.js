@@ -115,11 +115,10 @@ const baseConf = {
             jQuery: 'jquery',
             "window.jquery": 'jquery'
         }),
-        new transferWebpackPlugin([{
+        new transferWebpackPlugin({
             from: 'assets',
             to: 'assets'
-        }], path.resolve(__dirname, '..', 'src')),
-        new htmlWebpackPlugin.HotModuleReplacementPlugin(),
+        })
     ]
 };
 module.exports = baseConf;
