@@ -4,7 +4,10 @@
     "description": "#### Description 嘉实多 owned meida  小程序 后台管理系统",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "npm run dev",
+        "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+        "build": "webpack --mode production --config build/webpack.prod.conf.js"
     },
     "repository": {
         "type": "git",
@@ -30,6 +33,7 @@
         "eslint-friendly-formatter": "^4.0.1",
         "eslint-loader": "^2.2.1",
         "extract-text-webpack-plugin": "^3.0.2",
+        "friendly-errors-webpack-plugin": "^1.7.0",
         "html-webpack-plugin": "^3.2.0",
         "husky": "^3.0.0",
         "less": "^3.9.0",
@@ -37,6 +41,7 @@
         "lint-staged": "^9.2.0",
         "mini-css-extract-plugin": "^0.7.0",
         "node-notifier": "^5.4.0",
+        "optimize-css-assets-webpack-plugin": "^5.0.3",
         "portfinder": "^1.0.20",
         "postcss-loader": "^3.0.0",
         "style-loader": "^0.23.1",
@@ -51,8 +56,10 @@
     "browserslist": [
         "defaults",
         "> 1%",
-        "last 2 versions",
-        "not ie <= 8",
-        "ios > 7"
+        "last 4 versions",
+        "ie >= 8",
+        "Firefox >= 20",
+        "Safari >= 5",
+        "ios >= 6"
     ]
 }

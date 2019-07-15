@@ -1,15 +1,29 @@
 const config = require('../config');
 const packageConfig = require('../package.json');
 const os = require('os');
+const path = require('path');
 
 exports.assetsPath = (_path) => {
     const assetsSubDirectory = process.env.NODE_ENV === 'production' ?
         config.build.assetsSubDirectory :
-        config.dev.assetsSubDirectory
+        config.dev.assetsSubDirectory;
 
     return path.posix.join(assetsSubDirectory, _path)
 };
-
+exports.getHtmlConf = (name, chunks) => {
+    return {
+        template: `../src/pages/**/${name}.html`,
+        filename: `pages/${name}.html`,
+        inject: true,
+        hash: false,
+        chunks: [name],
+        minify: {
+            removeComments: true,
+            collapseWhitespace: true,
+            removeAttributeQuotes: true
+        },
+    }
+};
 exports.createNotifierCallback = () => {
     const notifier = require('node-notifier')
 
@@ -35,7 +49,7 @@ exports.getIPAddr = () => {
         for (let i = 0; i < iface; i++) {
             let alias = iface[i];
             if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
-                return alias.address
+                return alias.address;
             }
         }
     }

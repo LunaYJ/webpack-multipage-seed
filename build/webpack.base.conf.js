@@ -2,14 +2,11 @@
 const path = require('path');
 const utils = require('./utils');
 const config = require('../config');
-const vueLoaderConfig = require('./vue-loader.conf');
-const miniCssExtractPlugin = require('mini-css-extract-plugin');
-const htmlWebpackPlugin = require('html-webpack-plugin');
-const transferWebpackPlugin = require('transfer-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TransferWebpackPlugin = require('transfer-webpack-plugin');
 const autoprefixer = require('autoprefixer');
-const os = require('os');
-const portfinder = require('portfinder');
-const fs = require('fs');
+const webpack = require('webpack');
 
 /** */
 function resolve(dir) {
@@ -20,8 +17,8 @@ function resolve(dir) {
 const baseConf = {
     context: path.resolve(__dirname, '../'),
     entry: {
-        index: './src/pages/index/index.js',
-        login: './src/pages/login/index.js',
+        index: '../src/pages/index/index.js',
+        login: '../src/pages/login/index.js',
     },
     output: {
         path: config.build.assetsRoot,
@@ -56,29 +53,34 @@ const baseConf = {
             },
             {
                 test: /\.css$/,
-                use: [miniCssExtractPlugin.loader, 'css-loader', {
-                    loader: 'postcss-loader',
-                    options: {
-                        plugins: [
-                            autoprefixer({
-                                browsers: ['ic >= 8', 'Firefox >= 20', 'Safari >= 5', 'Android >= 4', 'Ios >=6', 'last 4 version']
-                            })
-                        ]
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: [
+                                autoprefixer
+                            ]
+                        }
                     }
-                }]
+                ]
             },
             {
                 test: /\.less$/,
-                user: [miniCssExtractPlugin.loader, 'css-loader', {
-                    loader: 'postcss-loader',
-                    options: {
-                        plugins: [
-                            autoprefixer({
-                                browsers: ['ic >= 8', 'Firefox >= 20', 'Safari >= 5', 'Android >= 4', 'Ios >=6', 'last 4 version']
-                            })
-                        ]
-                    }
-                }, 'less-loader']
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: [
+                                autoprefixer
+                            ]
+                        }
+                    },
+                    'less-loader'
+                ]
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -107,19 +109,18 @@ const baseConf = {
         ],
     },
     plugins: [
-        new miniCssExtractPlugin({
+        new MiniCssExtractPlugin({
             filename: './css/[name].css'
         }),
-        new htmlWebpackPlugin.ProvidePlugin({
+        new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
             "window.jquery": 'jquery'
         }),
-        new transferWebpackPlugin([{
+        new TransferWebpackPlugin([{
             from: 'assets',
             to: 'assets'
         }], path.resolve(__dirname, '..', 'src')),
-        new htmlWebpackPlugin.HotModuleReplacementPlugin(),
     ]
 };
 module.exports = baseConf;
