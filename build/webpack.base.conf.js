@@ -1,12 +1,10 @@
-'use strict';
-const path = require('path');
+ const path = require('path');
 const utils = require('./utils');
 const config = require('../config');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const TransferWebpackPlugin = require('transfer-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /** */
 function resolve(dir) {
@@ -15,28 +13,40 @@ function resolve(dir) {
 
 
 const baseConf = {
-    context: path.resolve(__dirname, '../'),
     entry: {
-        index: '../src/pages/index/index.js',
-        login: '../src/pages/login/index.js',
+        index: "./src/pages/index/index.js",
+        login: "./src/pages/login/index.js"
     },
     output: {
-        path: config.build.assetsRoot,
-        filename: config.build.filename,
-        publicPath: process.env.NODE_ENV === 'production' ?
-            config.build.assetsPublicPath : config.dev.assetsPublicPath,
-    },
-    resolve: {
-        extensions: ['.js', '.json'],
-        alias: {
-            '@': resolve('src'),
-        },
+        filename: "./js/[name].[hash].bundle.js",
+        path: path.resolve(__dirname, '..', 'dist'),
+        publicPath: "/",
+        chunkFilename: "./js/[name].chunk.js"
     },
     module: {
-        rules: [{
+        rules: [
+            {
+                test: /\.(le|c)ss$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            ident: 'postcss',
+                            plugin: [
+                                autoprefixer
+                            ]
+                        }
+                    },
+                    'less-loader'
+                ]
+            },
+            {
                 test: /\.js$/,
                 include: [resolve('src')],
-                use: [{
+                use: [
+                    {
                         loader: "babel-loader",
                         options: {
                             presets: ['@babel/preset-env'],
@@ -49,37 +59,6 @@ const baseConf = {
                             formatter: require("eslint-friendly-formatter")
                         }
                     }
-                ]
-            },
-            {
-                test: /\.css$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader',
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            plugins: [
-                                autoprefixer
-                            ]
-                        }
-                    }
-                ]
-            },
-            {
-                test: /\.less$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader',
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            plugins: [
-                                autoprefixer
-                            ]
-                        }
-                    },
-                    'less-loader'
                 ]
             },
             {
@@ -106,21 +85,36 @@ const baseConf = {
                     name: utils.assetsPath('fonts/[name].[hash:7].[ext]'),
                 },
             },
-        ],
+        ]
     },
     plugins: [
         new MiniCssExtractPlugin({
             filename: './css/[name].css'
         }),
-        new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            "window.jquery": 'jquery'
+        new HtmlWebpackPlugin({
+            template: "./src/pages/index/index.html",
+            title: 'index',
+            filename: "index.html",
+            chunks: ['manifest', 'vendor', 'index']
         }),
-        new TransferWebpackPlugin([{
-            from: 'assets',
-            to: 'assets'
-        }], path.resolve(__dirname, '..', 'src')),
-    ]
+        new HtmlWebpackPlugin({
+            template: "./src/pages/login/index.html",
+            title: 'login',
+            filename: "login.html",
+            chunks: ['manifest', 'vendor', 'login']
+        })
+    ],
+    optimization: {
+        runtimeChunk: {name: "manifest"},
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendor',
+                    chunks: "initial"
+                }
+            }
+        }
+    }
 };
 module.exports = baseConf;
