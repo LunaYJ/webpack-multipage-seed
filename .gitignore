@@ -147,3 +147,5 @@ typings/
 .serverless
 
 .history
+
+dist

@@ -11,6 +11,7 @@ function resolve(dir) {
     return path.join(__dirname, '..', dir);
 }
 
+console.log('env: ', process.env.NODE_ENV)
 
 const baseConf = {
     entry: {
@@ -18,10 +19,10 @@ const baseConf = {
         login: "./src/pages/login/index.js"
     },
     output: {
-        filename: "./js/[name].[hash].bundle.js",
+        filename: "static/js/[name].[hash].bundle.js",
         path: path.resolve(__dirname, '..', 'dist'),
-        publicPath: "/",
-        chunkFilename: "./js/[name].chunk.js"
+        publicPath: process.env.NODE_ENV === 'production' ? "./" : "/",
+        chunkFilename: "static/js/[name].chunk.js"
     },
     module: {
         rules: [
@@ -89,7 +90,12 @@ const baseConf = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: './css/[name].css'
+            filename: 'static/css/[name].css'
+        }),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jquery': 'jquery'
         }),
         new HtmlWebpackPlugin({
             template: "./src/pages/index/index.html",

@@ -12,34 +12,8 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 
 const prodConf = merge(baseConf, {
-    plugins: [
-        new HtmlWebpackPlugin({
-            filename: "index.html",
-            title: 'index',
-            chunks: ['index'],
-            template: "../src/pages/index/index.html",
-            inject: true,
-            hash: false,
-            minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeAttributeQuotes: true
-            },
-        }),
-        new HtmlWebpackPlugin({
-            template: "../src/pages/login/index.html",
-            filename: "login.html",
-            chunks: ['login'],
-            title: 'login',
-            inject: true,
-            hash: false,
-            minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeAttributeQuotes: true
-            },
-        })
-    ]
+    mode: "production",
+    plugins: []
 });
 
 module.exports = prodConf;
