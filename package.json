@@ -16,7 +16,7 @@
     "author": "Luna Zhou",
     "license": "ISC",
     "dependencies": {
-        "jquery": "^3.4.1",
+        "jquery": "^3.5.0",
         "jquery-pjax": "^2.0.1",
         "lodash": "^4.17.14"
     },
